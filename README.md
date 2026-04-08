@@ -1,2 +1,0 @@
-# Statek
-"# teststrona" 
