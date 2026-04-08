@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Wisielec</title>
+
+<style>
+body{
+font-family:Arial;
+text-align:center;
+background: linear-gradient(90deg, rgba(51,255,0,1) 0%, rgba(0,204,255,1) 35%, rgba(166,255,0,1) 100%);
+}
+
+#haslo{
+font-size:40px;
+letter-spacing:10px;
+margin:20px;
+}
+
+button{
+margin:3px;
+padding:10px;
+font-size:16px;
+}
+
+img{
+width:200px;
+}
+#gra{display:none}
+#koniec{display:none;font-size:40px;margin-top:20px}
+</style>
+
+</head>
+<body>
+
+<div id="start">
+<h1>HANGMAN</h1>
+<button onclick="start()">START</button>
+</div>
+
+<div id="gra">
+<h1>HANGMAN</h1>
+<img id="obraz" src="Nowy projekt.png">
+<div id="haslo"></div>
+<div id="litery"></div>
+</div>
+
+<div id="koniec"></div>
+
+<script>
+
+let slowo="KLAWIATURA"
+let zgadniete=""
+let bledy=0
+
+let obrazy=[
+"Nowy projekt.png",
+"Nowy projekt (1).png",
+"Nowy projekt (2).png",
+"Nowy projekt (3).png",
+"Nowy projekt (4).png",
+"Nowy projekt (5).png",
+"Nowy projekt (6).png",
+"Nowy projekt (7).png",
+"Nowy projekt (8).png"
+]
+
+function start(){
+document.getElementById("start").style.display="none"
+document.getElementById("gra").style.display="block"
+}
+
+function rysuj(){
+let tekst=""
+for(let l of slowo){
+if(zgadniete.includes(l)){tekst+=l+" "}
+else{tekst+="_ "}
+}
+document.getElementById("haslo").innerText=tekst
+
+if(!tekst.includes("_")){
+koniec("WYGRAŁEŚ")
+}
+
+if(bledy==8){
+koniec("PRZEGRAŁEŚ - HASŁO: "+slowo)
+}
+}
+function zgadnij(l){
+if(slowo.includes(l)){zgadniete+=l}
+else{
+bledy++
+document.getElementById("obraz").src=obrazy[bledy]
+}
+rysuj()
+}
+function koniec(t){
+document.getElementById("gra").style.display="none"
+let k=document.getElementById("koniec")
+k.style.display="block"
+k.innerText=t
+}
+let alfabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+for(let l of alfabet){
+let przycisk=document.createElement("button")
+przycisk.innerText=l
+przycisk.onclick=function(){zgadnij(l);przycisk.disabled=true}
+document.getElementById("litery").appendChild(przycisk)
+}
+rysuj()
+</script>
+</body>
+</html>
