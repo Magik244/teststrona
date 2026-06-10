@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>canvas</title>
+    <title>canva</title>
     <style>
         body {
             text-align: center;
@@ -55,7 +55,7 @@
         </button>
     </div>
 
-    <canvas id="canvasRysowania" width="600" height="500"></canvas>
+    <canvas id="canvasRysowania" width="600" height="480"></canvas>
 
     <script>
         var canvas = document.getElementById('canvasRysowania');
@@ -73,12 +73,12 @@
 
         canvas.onmousedown = function(e) {
             rysuj = true;
-            rysujObrazek(e);
+            rysujNaSiatce(e);
         };
 
         canvas.onmousemove = function(e) {
             if (rysuj == true) {
-                rysujObrazek(e);
+                rysujNaSiatce(e);
             }
         };
 
@@ -90,16 +90,16 @@
             rysuj = false;
         };
 
-        function rysujObrazek(e) {
+        function rysujNaSiatce(e) {
             var x = e.clientX - canvas.offsetLeft;
             var y = e.clientY - canvas.offsetTop;
             
-            var rysujX = x - (rozmiarObrazka / 2);
-            var rysujY = y - (rozmiarObrazka / 2);
+            var siatkaX = Math.floor(x / rozmiarObrazka) * rozmiarObrazka;
+            var siatkaY = Math.floor(y / rozmiarObrazka) * rozmiarObrazka;
             
-            ctx.drawImage(pedzelObrazek, rysujX, rysujY, rozmiarObrazka, rozmiarObrazka);
+            ctx.drawImage(pedzelObrazek, siatkaX, siatkaY, rozmiarObrazka, rozmiarObrazka);
         }
     </script>
-  
+   
 </body>
 </html>
