@@ -2,95 +2,104 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>canvas</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            text-align: center;
             background-color: #f0f0f0;
-            margin: 0;
             font-family: sans-serif;
         }
 
         .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            margin: 20px;
         }
-
-        .color-btn {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            border: 2px solid #333;
+        button {
+            padding: 5px;
+            margin: 0 5px;
+            font-size: 16px;
             cursor: pointer;
-            outline: none;
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.2s;
         }
 
-        #btn-black { background-color: #000000; }
-        #btn-red { background-color: #ff0000; }
-        #btn-blue { background-color: #0000ff; }
+        button:hover {
+            border-color: #333;
+        }
+
+        button img {
+            width: 40px;
+            height: 40px;
+            display: block;
+            object-fit: contain;
+        }
 
         canvas {
-            border: 2px solid #333;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid black;
+            background-color: white;
         }
     </style>
 </head>
 <body>
 
     <div class="controls">
-        <button class="color-btn" id="btn-black"></button>
-        <button class="color-btn" id="btn-red"></button>
-        <button class="color-btn" id="btn-blue"></button>
+        <button onclick="zmienObrazek('1.png')">
+            <img src="1.png" alt="Obrazek 1">
+        </button>
+        <button onclick="zmienObrazek('2.png')">
+            <img src="2.png" alt="Obrazek 2">
+        </button>
+        <button onclick="zmienObrazek('3.png')">
+            <img src="3.png" alt="Obrazek 3">
+        </button>
     </div>
 
-    <canvas id="canvasRysowania" width="150" height="150"></canvas>
+    <canvas id="canvasRysowania" width="600" height="500"></canvas>
 
     <script>
-        const canvas = document.getElementById('canvasRysowania');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
+        var canvas = document.getElementById('canvasRysowania');
+        var ctx = canvas.getContext('2d');
+        var rysuj = false;
 
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
+        var pedzelObrazek = new Image();
+        pedzelObrazek.src = '1.png'; 
 
-        function startDrawing(e) {
-            isDrawing = true;
-            draw(e);
+        var rozmiarObrazka = 40; 
+
+        function zmienObrazek(sciezka) {
+            pedzelObrazek.src = sciezka;
         }
 
-        function stopDrawing() {
-            isDrawing = false;
-            ctx.beginPath();
+        canvas.onmousedown = function(e) {
+            rysuj = true;
+            rysujObrazek(e);
+        };
+
+        canvas.onmousemove = function(e) {
+            if (rysuj == true) {
+                rysujObrazek(e);
+            }
+        };
+
+        canvas.onmouseup = function() {
+            rysuj = false;
+        };
+
+        canvas.onmouseleave = function() {
+            rysuj = false;
+        };
+
+        function rysujObrazek(e) {
+            var x = e.clientX - canvas.offsetLeft;
+            var y = e.clientY - canvas.offsetTop;
+            
+            var rysujX = x - (rozmiarObrazka / 2);
+            var rysujY = y - (rozmiarObrazka / 2);
+            
+            ctx.drawImage(pedzelObrazek, rysujX, rysujY, rozmiarObrazka, rozmiarObrazka);
         }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-
-        document.getElementById('btn-black').addEventListener('click', () => ctx.strokeStyle = '#000000');
-        document.getElementById('btn-red').addEventListener('click', () => ctx.strokeStyle = '#ff0000');
-        document.getElementById('btn-blue').addEventListener('click', () => ctx.strokeStyle = '#0000ff');
-
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
     </script>
-
+  
 </body>
 </html>
